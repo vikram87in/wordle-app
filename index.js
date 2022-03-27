@@ -1,5 +1,3 @@
-console.log('this is going to be an amazing app');
-
 const NO_OF_ROWS = 6;
 const NO_OF_COLUMNS = 5;
 const body = document.body;
