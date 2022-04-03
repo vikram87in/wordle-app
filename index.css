@@ -22,6 +22,7 @@ body{
   --lightGray: #cbcbcb;
   --darkGray: #717477;
   --white: #ffffff;
+  --black: #000000;
 
   --col-bg-color-present: var(--darkYellow);
   --col-bg-color-absent: var(--darkGray);
@@ -33,6 +34,8 @@ body{
   --font-color-present: var(--white);
   --font-color-correct: var(--font-color-present);
   --font-color-absent: var(--font-color-present);
+  --message-bg-color: var(--black);
+  --message-color: var(--white);
 }
 
 /* header */
@@ -48,7 +51,7 @@ hr {
 }
 
 .bottom-hr {
-  margin-bottom: 80px;
+  margin-bottom: 140px;
 }
 
 /* boxes  */
@@ -56,6 +59,21 @@ hr {
 .rows-container {
   margin-bottom: 80px;
   min-width: 310px;
+  position: relative;
+}
+
+.message::before {
+  content: attr(data-message);
+  color: var(--message-color);
+  background-color: var(--message-bg-color);
+  position: absolute;
+  font-weight: 900;
+  max-width: 200px;
+  border-radius: 10px;
+  padding: 10px 25px;
+  line-height: 1.6;
+  text-transform: capitalize;
+  transform: translate(-50%, -120%);
 }
 
 .row {
@@ -158,8 +176,15 @@ hr {
     margin-top: 5px;
   }
 
-  .rows-container,
-  .bottom-hr {
-    margin-bottom: 15px;
+  .rows-container {
+    margin-bottom:10px;
   }
+
+  .bottom-hr {
+    margin-bottom: 50px;
+  }
+
+  .message::before {
+    transform: translate(-50%, 100%);
+  } 
 }

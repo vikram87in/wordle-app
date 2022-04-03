@@ -55,7 +55,20 @@ let CURRENT_CELL = getCell(CURRENT_ROW_INDEX, CURRENT_COL_INDEX);
 // })
 
 
+
+
 // functions
+
+function applyClassToElemForXTime(selector, className, duration, messageData) {
+  let elem = document.querySelector(selector);
+  if (!elem) return;
+  messageData && (elem.dataset.message = messageData);
+  elem.classList.add(className);
+  setTimeout(() => {
+    elem.classList.remove(className);
+    messageData && (elem.dataset.message = '');
+  }, duration);
+}
 
 function getCell(nthRow, nthCol) {
   if (nthRow > MAX_NO_OF_ROWS || nthCol > MAX_NO_OF_COLUMNS) return;
@@ -99,6 +112,10 @@ function deleteText() {
 
 function processEnterClick() {
   // TODO: validate
+  if (CURRENT_COL_INDEX < MAX_NO_OF_COLUMNS) {
+    applyClassToElemForXTime('.rows-container', 'message', 1000, 'not enough letters');
+    return;
+  }
 
   if (CURRENT_ROW_INDEX < (MAX_NO_OF_ROWS - 1)) {
     goToNextRow();
