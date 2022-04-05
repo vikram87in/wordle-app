@@ -10,6 +10,7 @@
 
 body{
   font-family: Verdana,sans-serif; 
+  position: relative;
 }
 
 /* variables  */
@@ -96,29 +97,34 @@ hr {
 .col.present {
   background-color: var(--col-bg-color-present);
   color: var(--font-color-present);
+  border: none;
 }
 
 .col.absent {
   background-color: var(--col-bg-color-absent);
   color: var(--font-color-absent);
+  border: none;
 }
 
 .col.correct {
   background-color: var(--col-bg-color-correct);
   color: var(--font-color-correct);
+  border: none;
 }
 
 .col.flip {
-  animation: flipVertically 1500ms linear forwards;
+  animation: flipVertically 600ms ease-in;
 }
 
 @keyframes flipVertically {
-  from {
+  0% {
     transform: perspective(400px) rotateX(0);
   }
-
-  to {
-    transform: perspective(400px) rotateX(360deg);
+  50% {
+    transform: perspective(400px) rotateX(-90deg);
+  }
+  100%{
+    transform: perspective(400px) rotateX(0);
   }
 }
 
@@ -165,6 +171,25 @@ hr {
 .letter.correct {
   background-color: var(--key-bg-correct);
   color: var(--font-color-correct);
+}
+
+/* Overlay and Popups  */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #c9bfbf;
+  opacity: 0.5;
+}
+
+.popup {
+  position: absolute;
+    width: 300px;
+    min-height: 400px;
+    border: 2px solid red;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* responsiveness */

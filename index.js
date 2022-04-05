@@ -638,13 +638,42 @@ function verifyEnteredWord() {
   return guessedWord == SECRET_WORD;
 }
 
-function processEnterClick() {
-  // TODO: validate
+function matchEachLetterAndApplyColor() {
+  let rowIndex = CURRENT_ROW_INDEX;
+  let word = guessedWord;
+  for (let i = 0; i < MAX_NO_OF_COLUMNS; i++) {
+    setTimeout(() => {
+      let CURRENT_CELL = getCell(rowIndex, i);
+      CURRENT_CELL.classList.add('flip');
+      if (word[i] == SECRET_WORD[i]) {
+        CURRENT_CELL.classList.add('correct');
+      }
+      else if (SECRET_WORD.includes(word[i])) {
+        CURRENT_CELL.classList.add('present');
+      }
+      else {
+        CURRENT_CELL.classList.add('absent');
+      }
+    }, i * 500)
+  }
+}
+
+function shouldProceedForMatch() {
   if (CURRENT_COL_INDEX < MAX_NO_OF_COLUMNS) {
     applyClassToElemForXTime('.rows-container', 'message', 1000, 'not enough letters');
-    return;
+    return false;
   }
+  // if (!arrWrds.includes(guessedWord.toLowerCase())) {
+  //   applyClassToElemForXTime('.rows-container', 'message', 1000, 'not in word list');
+  //   return false;
+  // }
+  return true;
+}
 
+function processEnterClick() {
+  let shouldProceed = shouldProceedForMatch();
+  if (!shouldProceed) return;
+  matchEachLetterAndApplyColor();
   if (CURRENT_ROW_INDEX < (MAX_NO_OF_ROWS - 1)) {
     // TODO: include all scenarios
     if (verifyEnteredWord()) {
