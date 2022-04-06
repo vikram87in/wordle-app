@@ -1,5 +1,7 @@
 const MAX_NO_OF_ROWS = 6;
 const MAX_NO_OF_COLUMNS = 5;
+const displayNone = 'd-none';
+const rulesPopupShown = 'RPS';
 const arrLetters = [
   ['q',
     'w',
@@ -537,6 +539,7 @@ const body = document.body;
 let arrTriedWords = [];
 let guessedWord = '';
 createElementsDynamically();
+showRulesPopup();
 const SECRET_WORD = getSecretWord()?.toUpperCase();
 console.log(SECRET_WORD);
 addRequiredEventListeners();
@@ -725,6 +728,14 @@ function addRequiredEventListeners() {
       processKeyPressOrClick(val);
     }
   })
+
+  let crossIcon = document.querySelector('.cross-icon');
+  crossIcon.addEventListener('click', (e) => {
+    console.log('cross icon clicked');
+    let rulesPopup = document.querySelector('.game-rules');
+    rulesPopup.classList.add(displayNone);
+    window.localStorage.setItem(rulesPopupShown, '1');
+  })
 }
 
 function isValidKeyPressed(val) {
@@ -799,4 +810,13 @@ function addBox(elem, parentElem, elemClass, callBackFun) {
   callBackFun?.(div);
   parentElem.appendChild(div);
   return div;
+}
+
+function showRulesPopup() {
+  let rulesShown = window.localStorage.getItem(rulesPopupShown);
+  let showRulesPopup = rulesShown !== '1';
+  if (showRulesPopup) {
+    let rulesPopup = document.querySelector('.game-rules');
+    rulesPopup.classList.remove(displayNone);
+  }
 }
