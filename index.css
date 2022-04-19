@@ -7,8 +7,8 @@
   text-align: center;
 }
 
-body{
-  font-family: Tahoma, Verdana, sans-serif; 
+body {
+  font-family: Tahoma, Verdana, sans-serif;
   position: relative;
 }
 
@@ -83,6 +83,34 @@ hr {
   justify-content: center;
 }
 
+.shake {
+  animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+
 .col {
   height: 60px;
   width: 58px;
@@ -121,10 +149,12 @@ hr {
   0% {
     transform: perspective(400px) rotateX(0);
   }
+
   50% {
     transform: perspective(400px) rotateX(-90deg);
   }
-  100%{
+
+  100% {
     transform: perspective(400px) rotateX(0);
   }
 }
@@ -186,12 +216,12 @@ hr {
 
 .popup {
   position: absolute;
-    width: 300px;
-    min-height: 400px;
-    border: 2px solid red;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  width: 300px;
+  min-height: 400px;
+  border: 2px solid red;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Game rules popup  */
@@ -212,7 +242,7 @@ hr {
   align-items: flex-end;
 }
 
-.game-rules .demo-row p{
+.game-rules .demo-row p {
   width: 70%;
   margin: 3px 10px;
 }
@@ -254,6 +284,7 @@ hr {
 /* responsiveness */
 
 @media only screen and (max-device-width: 415px) and (orientation: portrait) {
+
   h1,
   hr {
     margin-bottom: 5px;
@@ -261,7 +292,7 @@ hr {
   }
 
   .rows-container {
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
 
   .bottom-hr {
@@ -270,7 +301,7 @@ hr {
 
   .message::before {
     transform: translate(-50%, 100%);
-  } 
+  }
 
   .game-rules {
     width: 90%;

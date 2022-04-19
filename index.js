@@ -572,14 +572,14 @@ function getSecretWord() {
   return arrWrds[Math.floor(Math.random() * arrWrds.length)];
 }
 
-function applyClassToElemForXTime(selector, className, duration, messageData) {
-  let elem = document.querySelector(selector);
-  if (!elem) return;
-  messageData && (elem.dataset.message = messageData);
-  elem.classList.add(className);
+function applyClassToElementForXTime(element, className, dataObj = {}) {
+  if (!element) return;
+  const { duration = 1000, messageData } = dataObj;
+  messageData && (element.dataset.message = messageData);
+  element.classList.add(className);
   setTimeout(() => {
-    elem.classList.remove(className);
-    messageData && (elem.dataset.message = '');
+    element.classList.remove(className);
+    messageData && (element.dataset.message = '');
   }, duration);
 }
 
@@ -663,14 +663,25 @@ function matchEachLetterAndApplyColor() {
 
 function shouldProceedForMatch() {
   if (CURRENT_COL_INDEX < MAX_NO_OF_COLUMNS) {
-    applyClassToElemForXTime('.rows-container', 'message', 1000, 'not enough letters');
+    shakeRow();
+    showErrorMessage();
     return false;
   }
-  // if (!arrWrds.includes(guessedWord.toLowerCase())) {
-  //   applyClassToElemForXTime('.rows-container', 'message', 1000, 'not in word list');
-  //   return false;
-  // }
   return true;
+}
+
+function showErrorMessage() {
+  let elem = document.querySelector('.rows-container');
+  applyClassToElementForXTime(elem, 'message', { messageData: 'not enough letters' });
+}
+
+function shakeRow() {
+  const elemList = document.querySelectorAll('.row');
+  let elem;
+  if (elemList && elemList.length > 0) {
+    elem = elemList[CURRENT_ROW_INDEX];
+  }
+  applyClassToElementForXTime(elem, 'shake');
 }
 
 function processEnterClick() {
