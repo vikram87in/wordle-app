@@ -2,6 +2,9 @@ const MAX_NO_OF_ROWS = 6;
 const MAX_NO_OF_COLUMNS = 5;
 const displayNone = 'd-none';
 const rulesPopupShown = 'RPS';
+const PRESENT = -1;
+const ABSENT = 0;
+const CORRECT = 1;
 const arrLetters = [
   ['q',
     'w',
@@ -541,30 +544,12 @@ let guessedWord = '';
 createElementsDynamically();
 showRulesPopup();
 const SECRET_WORD = getSecretWord()?.toUpperCase();
-console.log(SECRET_WORD);
+console.log('secretword: ', SECRET_WORD);
 addRequiredEventListeners();
 let CURRENT_ROW_INDEX = 0; // also check if already available. set from there
 let CURRENT_COL_INDEX = 0; // also check if already available. set from there
 
 let CURRENT_CELL = getCell(CURRENT_ROW_INDEX, CURRENT_COL_INDEX);
-
-
-
-// TODO: below code just for testing; remove later on
-// const colElem = document.querySelectorAll('.col');
-// colElem.forEach(x => x.textContent = 'M');
-// const firstRow = document.querySelector('.row');
-// const arrCol = firstRow.querySelectorAll('.col');
-// arrCol.forEach((x, i) => {
-//   setTimeout(() => {
-
-//     x.classList.add('flip');
-//     x.classList.add(i % 2 == 0 ? 'correct' : 'present');
-//   }, 1200 * i)
-// })
-
-
-
 
 // functions
 
@@ -644,21 +629,52 @@ function verifyEnteredWord() {
 function matchEachLetterAndApplyColor() {
   let rowIndex = CURRENT_ROW_INDEX;
   let word = guessedWord;
+  let colorArr = [];
   for (let i = 0; i < MAX_NO_OF_COLUMNS; i++) {
     setTimeout(() => {
       let CURRENT_CELL = getCell(rowIndex, i);
       CURRENT_CELL.classList.add('flip');
       if (word[i] == SECRET_WORD[i]) {
         CURRENT_CELL.classList.add('correct');
+        colorArr.push(CORRECT);
       }
       else if (SECRET_WORD.includes(word[i])) {
         CURRENT_CELL.classList.add('present');
+        colorArr.push(PRESENT);
       }
       else {
         CURRENT_CELL.classList.add('absent');
+        colorArr.push(ABSENT);
+      }
+      if (i == MAX_NO_OF_COLUMNS - 1) {
+        colorKeyboard(word, colorArr);
       }
     }, i * 500)
   }
+}
+
+function colorKeyboard(word, colorArr) {
+  let colorClass;
+  let wordArr = Array.from(word);
+  wordArr?.forEach((letter, i) => {
+    letter = word[i].toLowerCase();
+    switch (colorArr[i]) {
+      case CORRECT:
+        colorClass = 'correct';
+        break;
+      case PRESENT:
+        colorClass = 'present';
+        break;
+      default:
+        colorClass = 'absent';
+    }
+    colorKeyboardLetter(letter, colorClass);
+  })
+}
+
+function colorKeyboardLetter(letter, colorClass) {
+  let elem = document.querySelector(`[data-val=${letter}]`)
+  elem.classList.add(colorClass);
 }
 
 function shouldProceedForMatch() {
@@ -725,7 +741,6 @@ function addRequiredEventListeners() {
   let keyBtnList = document.querySelectorAll('.letter');
   keyBtnList.forEach(keyBtn => {
     keyBtn.addEventListener('click', (e) => {
-      console.log(e.target.dataset.val.toUpperCase());
       let val = e.target.dataset.val.toUpperCase();
       processKeyPressOrClick(val);
     });
@@ -734,7 +749,6 @@ function addRequiredEventListeners() {
   // for key presses
   document.addEventListener('keydown', (e) => {
     if (isValidKeyPressed(e.key.toUpperCase())) {
-      console.log(e.key.toUpperCase());
       let val = e.key.toUpperCase();
       processKeyPressOrClick(val);
     }
@@ -742,7 +756,6 @@ function addRequiredEventListeners() {
 
   let crossIcon = document.querySelector('.cross-icon');
   crossIcon.addEventListener('click', (e) => {
-    console.log('cross icon clicked');
     let rulesPopup = document.querySelector('.game-rules');
     rulesPopup.classList.add(displayNone);
     window.localStorage.setItem(rulesPopupShown, '1');
