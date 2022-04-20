@@ -5,6 +5,7 @@ const rulesPopupShown = 'RPS';
 const PRESENT = -1;
 const ABSENT = 0;
 const CORRECT = 1;
+let FREEZE_SCREEN = false;
 const arrLetters = [
   ['q',
     'w',
@@ -631,6 +632,7 @@ function matchEachLetterAndApplyColor() {
   let word = guessedWord;
   let colorArr = [];
   for (let i = 0; i < MAX_NO_OF_COLUMNS; i++) {
+    FREEZE_SCREEN = true;
     setTimeout(() => {
       let CURRENT_CELL = getCell(rowIndex, i);
       CURRENT_CELL.classList.add('flip');
@@ -648,6 +650,7 @@ function matchEachLetterAndApplyColor() {
       }
       if (i == MAX_NO_OF_COLUMNS - 1) {
         colorKeyboard(word, colorArr);
+        FREEZE_SCREEN = false;
       }
     }, i * 500)
   }
@@ -724,6 +727,9 @@ function processEnterClick() {
 }
 
 function processKeyPressOrClick(val) {
+  if (FREEZE_SCREEN) {
+    return;
+  }
   if (isEnterKey(val)) {
     processEnterClick();
     return;
@@ -759,6 +765,7 @@ function addRequiredEventListeners() {
     let rulesPopup = document.querySelector('.game-rules');
     rulesPopup.classList.add(displayNone);
     window.localStorage.setItem(rulesPopupShown, '1');
+    FREEZE_SCREEN = false;
   })
 }
 
@@ -842,5 +849,6 @@ function showRulesPopup() {
   if (showRulesPopup) {
     let rulesPopup = document.querySelector('.game-rules');
     rulesPopup.classList.remove(displayNone);
+    FREEZE_SCREEN = true;
   }
 }
