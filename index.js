@@ -540,12 +540,10 @@ const arrWrds = [
 ]
 
 const body = document.body;
-let arrTriedWords = [];
 let guessedWord = '';
 createElementsDynamically();
 showRulesPopup();
 const SECRET_WORD = getSecretWord()?.toUpperCase();
-console.log('secretword: ', SECRET_WORD);
 addRequiredEventListeners();
 let CURRENT_ROW_INDEX = 0; // also check if already available. set from there
 let CURRENT_COL_INDEX = 0; // also check if already available. set from there
@@ -559,14 +557,19 @@ function getSecretWord() {
 }
 
 function applyClassToElementForXTime(element, className, dataObj = {}) {
-  if (!element) return;
+  if (!element) return Promise.resolve();
+  FREEZE_SCREEN = true;
   const { duration = 1000, messageData } = dataObj;
   messageData && (element.dataset.message = messageData);
   element.classList.add(className);
-  setTimeout(() => {
-    element.classList.remove(className);
-    messageData && (element.dataset.message = '');
-  }, duration);
+  return new Promise(resolve => {
+    setTimeout(() => {
+      element.classList.remove(className);
+      messageData && (element.dataset.message = '');
+      FREEZE_SCREEN = false;
+      resolve();
+    }, duration);
+  })
 }
 
 function getCell(nthRow, nthCol) {
@@ -586,9 +589,7 @@ function goToNextRow() {
 }
 
 function resetGuessedWord() {
-  arrTriedWords.push(guessedWord);
   guessedWord = '';
-  console.log('arrTriedWords: ', arrTriedWords);
 }
 
 function goToNextColumn() {
@@ -614,7 +615,6 @@ function setCurrentCellText(val) {
     else {
       guessedWord = guessedWord.slice(0, -1);
     }
-    console.log('guessedWord: ', guessedWord);
   }
 }
 
@@ -627,52 +627,73 @@ function verifyEnteredWord() {
   return guessedWord == SECRET_WORD;
 }
 
+function showSuccessAnimation() {
+  return new Promise((resolve) => {
+    for (let i = 0; i < MAX_NO_OF_COLUMNS; i++) {
+      FREEZE_SCREEN = true;
+      setTimeout(() => {
+        let currentCell = getCell(CURRENT_ROW_INDEX, i);
+        currentCell.classList.add('success');
+        if (i == MAX_NO_OF_COLUMNS - 1) {
+          FREEZE_SCREEN = false;
+          resolve();
+        }
+      }, i * 100)
+    }
+  });
+}
+
 function matchEachLetterAndApplyColor() {
   let rowIndex = CURRENT_ROW_INDEX;
   let word = guessedWord;
   let colorArr = [];
-  for (let i = 0; i < MAX_NO_OF_COLUMNS; i++) {
-    FREEZE_SCREEN = true;
-    setTimeout(() => {
-      let CURRENT_CELL = getCell(rowIndex, i);
-      CURRENT_CELL.classList.add('flip');
-      if (word[i] == SECRET_WORD[i]) {
-        CURRENT_CELL.classList.add('correct');
-        colorArr.push(CORRECT);
-      }
-      else if (SECRET_WORD.includes(word[i])) {
-        CURRENT_CELL.classList.add('present');
-        colorArr.push(PRESENT);
-      }
-      else {
-        CURRENT_CELL.classList.add('absent');
-        colorArr.push(ABSENT);
-      }
-      if (i == MAX_NO_OF_COLUMNS - 1) {
-        colorKeyboard(word, colorArr);
-        FREEZE_SCREEN = false;
-      }
-    }, i * 500)
-  }
+  return new Promise((resolve) => {
+    for (let i = 0; i < MAX_NO_OF_COLUMNS; i++) {
+      FREEZE_SCREEN = true;
+      setTimeout(() => {
+        let CURRENT_CELL = getCell(rowIndex, i);
+        CURRENT_CELL.classList.add('flip');
+        if (word[i] == SECRET_WORD[i]) {
+          CURRENT_CELL.classList.add('correct');
+          colorArr.push(CORRECT);
+        }
+        else if (SECRET_WORD.includes(word[i])) {
+          CURRENT_CELL.classList.add('present');
+          colorArr.push(PRESENT);
+        }
+        else {
+          CURRENT_CELL.classList.add('absent');
+          colorArr.push(ABSENT);
+        }
+        if (i == MAX_NO_OF_COLUMNS - 1) {
+          colorKeyboard(word, colorArr);
+          FREEZE_SCREEN = false;
+          resolve();
+        }
+      }, i * 500)
+    }
+  });
 }
 
 function colorKeyboard(word, colorArr) {
   let colorClass;
   let wordArr = Array.from(word);
-  wordArr?.forEach((letter, i) => {
-    letter = word[i].toLowerCase();
-    switch (colorArr[i]) {
-      case CORRECT:
-        colorClass = 'correct';
-        break;
-      case PRESENT:
-        colorClass = 'present';
-        break;
-      default:
-        colorClass = 'absent';
-    }
-    colorKeyboardLetter(letter, colorClass);
-  })
+  setTimeout(() => {
+    wordArr?.forEach((letter, i) => {
+      letter = word[i].toLowerCase();
+      switch (colorArr[i]) {
+        case CORRECT:
+          colorClass = 'correct';
+          break;
+        case PRESENT:
+          colorClass = 'present';
+          break;
+        default:
+          colorClass = 'absent';
+      }
+      colorKeyboardLetter(letter, colorClass);
+    })
+  }, 600);
 }
 
 function colorKeyboardLetter(letter, colorClass) {
@@ -691,7 +712,36 @@ function shouldProceedForMatch() {
 
 function showErrorMessage() {
   let elem = document.querySelector('.rows-container');
-  applyClassToElementForXTime(elem, 'message', { messageData: 'not enough letters' });
+  return applyClassToElementForXTime(elem, 'message', { messageData: 'not enough letters' });
+}
+
+function showCongratsMessage() {
+  let elem = document.querySelector('.rows-container');
+  return applyClassToElementForXTime(elem, 'message', { messageData: getMessage() });
+}
+
+function showYouLoseMessage() {
+  let elem = document.querySelector('.rows-container');
+  return applyClassToElementForXTime(elem, 'message', { messageData: 'sorry, you lose!' });
+}
+
+function getMessage() {
+  switch (CURRENT_ROW_INDEX) {
+    case 0:
+      return 'unbelievable!';
+    case 1:
+      return 'magnificent!';
+    case 2:
+      return 'impressive!';
+    case 3:
+      return 'superb!';
+    case 4:
+      return 'great!';
+    case 5:
+      return 'cool!';
+    default:
+      return 'congratulations!';
+  }
 }
 
 function shakeRow() {
@@ -700,30 +750,39 @@ function shakeRow() {
   if (elemList && elemList.length > 0) {
     elem = elemList[CURRENT_ROW_INDEX];
   }
-  applyClassToElementForXTime(elem, 'shake');
+  return applyClassToElementForXTime(elem, 'shake');
+}
+
+function postColorApplied() {
+  if (verifyEnteredWord()) {
+    showSuccessAnimation()
+    setTimeout(() => {
+      showCongratsMessage().then(res => {
+        showGameOverPopUp();
+      });
+    }, 1000)
+  }
+  else {
+    if (CURRENT_ROW_INDEX < (MAX_NO_OF_ROWS - 1)) {
+      goToNextRow();
+    }
+    else {
+      shakeRow();
+      setTimeout(() => {
+        showYouLoseMessage().then(res => {
+          showGameOverPopUp();
+        });
+      }, 1000)
+    }
+  }
 }
 
 function processEnterClick() {
   let shouldProceed = shouldProceedForMatch();
   if (!shouldProceed) return;
-  matchEachLetterAndApplyColor();
-  if (CURRENT_ROW_INDEX < (MAX_NO_OF_ROWS - 1)) {
-    // TODO: include all scenarios
-    if (verifyEnteredWord()) {
-      alert('congrats');
-    } else {
-      goToNextRow();
-    }
-  }
-  else {
-    // TODO: include all scenarios
-    if (verifyEnteredWord()) {
-      alert('congrats');
-    } else {
-      alert('game over');
-    }
-  }
-  // TODO: save in LS
+  matchEachLetterAndApplyColor().then(() => {
+    postColorApplied();
+  });
 }
 
 function processKeyPressOrClick(val) {
@@ -851,4 +910,14 @@ function showRulesPopup() {
     rulesPopup.classList.remove(displayNone);
     FREEZE_SCREEN = true;
   }
+}
+
+function showGameOverPopUp() {
+  let gameOverPopup = document.querySelector('.game-over');
+  FREEZE_SCREEN = true;
+  gameOverPopup.classList.remove(displayNone);
+}
+
+function restartGame() {
+  window.location.reload();
 }

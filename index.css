@@ -75,6 +75,8 @@ hr {
   line-height: 1.6;
   text-transform: capitalize;
   transform: translate(-50%, -120%);
+  z-index: 1;
+  letter-spacing: 2px;
 }
 
 .row {
@@ -156,6 +158,25 @@ hr {
 
   100% {
     transform: perspective(400px) rotateX(0);
+  }
+}
+
+.col.success {
+  animation: success 300ms 500ms cubic-bezier(0.1, -0.32, 1, 2.18);
+}
+
+@keyframes success {
+
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
   }
 }
 
@@ -280,6 +301,36 @@ hr {
   font-size: 12px;
   text-align: left;
 }
+
+.game-over {
+  position: fixed;
+  background-color: rgba(203, 203, 203, 0.8);
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.new-game {
+  background-color: var(--darkGreen);
+  width: 250px;
+  height: 70px;
+  border-radius: 12px;
+  font-size: 32px;
+  color: var(--black);
+  margin: 45vh auto;
+  box-shadow: 2px 2px 5px 1px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.new-game:hover {
+  background-color: var(--black);
+  color: var(--darkGreen);
+}
+
 
 /* responsiveness */
 
