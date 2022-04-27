@@ -722,7 +722,7 @@ function showCongratsMessage() {
 
 function showYouLoseMessage() {
   let elem = document.querySelector('.rows-container');
-  return applyClassToElementForXTime(elem, 'message', { messageData: 'sorry, you lose!' });
+  return applyClassToElementForXTime(elem, 'message', { messageData: `secret word: ${SECRET_WORD}` });
 }
 
 function getMessage() {
