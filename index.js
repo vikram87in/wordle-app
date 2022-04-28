@@ -720,7 +720,7 @@ function showCongratsMessage() {
   return applyClassToElementForXTime(elem, 'message', { messageData: getMessage() });
 }
 
-function showYouLoseMessage() {
+function revealSecretWord() {
   let elem = document.querySelector('.rows-container');
   return applyClassToElementForXTime(elem, 'message', { messageData: `secret word: ${SECRET_WORD}` });
 }
@@ -753,6 +753,13 @@ function shakeRow() {
   return applyClassToElementForXTime(elem, 'shake');
 }
 
+function shakeRowsContainer(){
+  setTimeout(() => { 
+    const elem = document.querySelector('.rows-container');
+    applyClassToElementForXTime(elem, 'shake');
+   }, 700)
+}
+
 function postColorApplied() {
   if (verifyEnteredWord()) {
     showSuccessAnimation()
@@ -767,9 +774,9 @@ function postColorApplied() {
       goToNextRow();
     }
     else {
-      shakeRow();
+      shakeRowsContainer();
       setTimeout(() => {
-        showYouLoseMessage().then(res => {
+        revealSecretWord().then(res => {
           showGameOverPopUp();
         });
       }, 1000)
@@ -888,9 +895,10 @@ function createKeysRow(parentElem) {
 
 function createKeys(parentRowElem, letterRow) {
   letterRow.forEach(letter => {
-    const div = addBox('div', parentRowElem, 'letter')
-    div.dataset['val'] = letter;
-    div.textContent = letter;
+    const button = addBox('button', parentRowElem, 'letter')
+    button.dataset['val'] = letter;
+    button.textContent = letter;
+    button.tabIndex = -1;
   });
 }
 
