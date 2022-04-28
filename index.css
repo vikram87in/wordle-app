@@ -205,7 +205,7 @@ hr {
   background-color: var(--lightGray);
   cursor: pointer;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .letter[data-val='enter'],
@@ -354,6 +354,7 @@ hr {
 
   .letter {
     height: 50px;
+    font-weight: 500;
   }
 
   .col {

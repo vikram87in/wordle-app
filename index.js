@@ -816,6 +816,11 @@ function addRequiredEventListeners() {
       let val = e.target.dataset.val.toUpperCase();
       processKeyPressOrClick(val);
     });
+    keyBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      let val = e.target.dataset.val.toUpperCase();
+      processKeyPressOrClick(val);
+    });
   })
 
   // for key presses
