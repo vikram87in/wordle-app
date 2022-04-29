@@ -21,33 +21,34 @@
   <div class="popup">
     Play Again
   </div> -->
-  <div class="game-rules d-none">
-    <button class="cross-icon bold-font">X</button>
-    <p>Guess the <span class="bold-font">WORDLE</span> in six tries.</p>
-    <p>Each guess must be a five letter word. Hit ENTER button to submit.</p>
-    <p>After each guess, the color of the tiles will change to show how close your guess was.</p>
-    <hr>
-    <div>
-      <p class="bold-font">Color's Meaning:</p>
+  
+    <div class="game-rules d-none">
+      <button class="cross-icon bold-font">X</button>
+      <p>Guess the <span class="bold-font">WORDLE</span> in six tries.</p>
+      <p>Each guess must be a five letter word. Hit ENTER button to submit.</p>
+      <p>After each guess, the color of the tiles will change to show how close your guess was.</p>
+      <hr>
       <div>
-        <div class="demo-row">
-          <div class="col correct demo-col">W</div>
-          <p>The letter <span class="bold-font">W</span> is in the word and in the correct spot.</p>
-        </div>
-        <div class="demo-row">
-          <div class="col present demo-col">W</div>
-          <p>The letter <span class="bold-font">W</span> is in the word but not in the correct spot.</p>
-        </div>
-        <div class="demo-row">
-          <div class="col absent demo-col">W</div>
-          <p>The letter <span class="bold-font">W</span> is not anywhere in the word</p>
+        <p class="bold-font">Color's Meaning:</p>
+        <div>
+          <div class="demo-row">
+            <div class="col correct demo-col">W</div>
+            <p>The letter <span class="bold-font">W</span> is in the word and in the correct spot.</p>
+          </div>
+          <div class="demo-row">
+            <div class="col present demo-col">W</div>
+            <p>The letter <span class="bold-font">W</span> is in the word but not in the correct spot.</p>
+          </div>
+          <div class="demo-row">
+            <div class="col absent demo-col">W</div>
+            <p>The letter <span class="bold-font">W</span> is not anywhere in the word</p>
+          </div>
         </div>
       </div>
+      <hr>
+      <p class="bold-font">Refresh the page to start a new game anytime!</p>
     </div>
-    <hr>
-    <p class="bold-font">Refresh the page to start a new game anytime!</p>
-  </div>
-
+    <div class="game-rules-container d-none"></div>
   <div class="game-over d-none">
     <button class="new-game" onclick="restartGame()">New Game</button>
   </div>

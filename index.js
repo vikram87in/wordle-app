@@ -833,7 +833,9 @@ function addRequiredEventListeners() {
 
   let crossIcon = document.querySelector('.cross-icon');
   crossIcon.addEventListener('click', (e) => {
+    let rulesContainer = document.querySelector('.game-rules-container');
     let rulesPopup = document.querySelector('.game-rules');
+    rulesContainer.classList.add(displayNone);
     rulesPopup.classList.add(displayNone);
     window.localStorage.setItem(rulesPopupShown, '1');
     FREEZE_SCREEN = false;
@@ -919,7 +921,9 @@ function showRulesPopup() {
   let rulesShown = window.localStorage.getItem(rulesPopupShown);
   let showRulesPopup = rulesShown !== '1';
   if (showRulesPopup) {
+    let rulesContainer = document.querySelector('.game-rules-container');
     let rulesPopup = document.querySelector('.game-rules');
+    rulesContainer.classList.remove(displayNone);
     rulesPopup.classList.remove(displayNone);
     FREEZE_SCREEN = true;
   }

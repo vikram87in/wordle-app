@@ -249,14 +249,22 @@ hr {
 
 /* Game rules popup  */
 
+.game-rules-container {
+  position: fixed;
+  background-color: rgba(203, 203, 203, 0.8);
+  inset: 0;
+}
+
 .game-rules {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   background-color: var(--bg-color-popup);
   border-radius: 5px;
   box-shadow: 1px 1px 10px 1px;
+  min-width: 300px;
   z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .game-rules .demo-row {
@@ -267,7 +275,7 @@ hr {
 
 .game-rules .demo-row p {
   width: 70%;
-  margin: 3px 10px;
+  margin: 4px 10px;
 }
 
 .game-rules .bold-font {
@@ -308,10 +316,10 @@ hr {
   position: fixed;
   background-color: rgba(203, 203, 203, 0.8);
   z-index: 1;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .new-game {
@@ -321,7 +329,6 @@ hr {
   border-radius: 12px;
   font-size: 32px;
   color: var(--black);
-  margin: 45vh auto;
   box-shadow: 2px 2px 5px 1px;
   border: none;
   cursor: pointer;
